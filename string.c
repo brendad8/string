@@ -13,10 +13,10 @@ typedef struct str
 } str;
 
 
-#define strl(l) \
+#define str_fl(l) \
     ((str){ .data = (l), .length = sizeof((l)) - 1 })
 
-#define strp(p) \
+#define str_fp(p) \
     ((str){ .data = (p), .length = strlen((p)) })
 
 #define str_fmt(s) \
@@ -28,12 +28,12 @@ typedef struct str
 #define str_isempty(s) \
     (((s).data) ? (s).length == 0 : 1)
 
-#define strc(x)                   \
-    _Generic((x),                 \
-        str:            (x),      \
-        char*:          strp(x),  \
-        const char*:    strp(x),  \
-        default:        strl(x)   \
+#define __str(x)                    \
+    _Generic((x),                   \
+        str:            (x),        \
+        char*:          str_fp(x),  \
+        const char*:    str_fp(x),  \
+        default:        str_fl(x)   \
     )
 
 #define str_match(a, b) \
@@ -66,21 +66,21 @@ str  str_sub_impl(str s, size_t begin, size_t end);
 str  str_remove_prefix_impl(str s, str prefix);
 str  str_remove_suffix_impl(str s, str suffix);
 
-// int str_compare(str a, str b); → lexicographical compare, useful for sorting
-// str_from_ptr(char* data, size_t len)
-// size_t str_index_of(str s, str pattern)
+// int str_compare(str a, str b);
+// str_from_ptr(char* data, size_t len);
+// size_t str_index_of(str s, str pattern);
 
 int main(void) {
     
-    str test1 = strl("jajaja");
+    str test1 = str_fl("jajaja");
     printf("my_str: %.*s\n", str_fmt(test1));
     
     char* cstr = "hehehe";
-    str test2 = strp(cstr); 
+    str test2 = str_fp(cstr); 
     printf("my_str: %.*s\n", str_fmt(test2));
 
     const char* cstr2 = "hahaha";
-    str test3 = strp(cstr2); 
+    str test3 = str_fp(cstr2); 
     printf("my_str: %.*s\n", str_fmt(test3));
 
     return 0;
