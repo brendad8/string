@@ -5,18 +5,57 @@
 #include <string.h>
 #include <assert.h>
 
-typedef struct str
+typedef struct str 
 {
     size_t length;
     const char* data;
 
 } str;
 
-#define strl(l)        ((str){ .data = (l), .length = sizeof((l)) - 1 })
-#define strp(p)        ((str){ .data = (p), .length = strlen((p)) })
-#define str_fmt(s)     (int)(s).length, (s).data
-#define str_isnull(s)  ((s).data == NULL)
-#define str_isempty(s) (((s).data) ? (s).length == 0 : 1)
+
+#define strl(l) \
+    ((str){ .data = (l), .length = sizeof((l)) - 1 })
+
+#define strp(p) \
+    ((str){ .data = (p), .length = strlen((p)) })
+
+#define str_fmt(s) \
+    (int)(s).length, (s).data
+
+#define str_isnull(s) \
+    ((s).data == NULL)
+
+#define str_isempty(s) \
+    (((s).data) ? (s).length == 0 : 1)
+
+#define strc(x)                   \
+    _Generic((x),                 \
+        str:            (x),      \
+        char*:          strp(x),  \
+        const char*:    strp(x),  \
+        default:        strl(x)   \
+    )
+
+#define str_match(a, b) \
+    str_match_impl(strc(a), strc(b))
+
+#define str_contains(s, p) \
+    str_contains_impl(strc(s), strc(p))
+
+#define str_starts_with(s, p) \
+    str_starts_with_impl(strc(s), strc(p))
+
+#define str_ends_with(s, p) \
+    str_ends_with_impl(strc(s), strc(p))
+
+#define str_sub(s, begin, end) \
+    str_sub_impl(strc(s), (begin), (end))
+
+#define str_remove_prefix(s, p) \
+    str_remove_prefix_impl(strc(s), strc(p))
+
+#define str_remove_suffix(s, p) \
+    str_remove_suffix_impl(strc(s), strc(p))
 
 
 bool str_match_impl(str a, str b);
@@ -31,18 +70,22 @@ str  str_remove_suffix_impl(str s, str suffix);
 // str_from_ptr(char* data, size_t len)
 // size_t str_index_of(str s, str pattern)
 
-
 int main(void) {
+    
+    str test1 = strl("jajaja");
+    printf("my_str: %.*s\n", str_fmt(test1));
+    
+    char* cstr = "hehehe";
+    str test2 = strp(cstr); 
+    printf("my_str: %.*s\n", str_fmt(test2));
 
-    str my_str = strl("hello mom!");
-    printf("my_str: %.*s\n", str_fmt(my_str));
-
-    str a = strl("Hi mom");
-    str b = strl("Hi dad");
-    str c = strl("Hi mom");
+    const char* cstr2 = "hahaha";
+    str test3 = strp(cstr2); 
+    printf("my_str: %.*s\n", str_fmt(test3));
 
     return 0;
 }
+
 
 bool str_match_impl(str a, str b)
 {
