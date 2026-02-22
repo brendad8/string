@@ -2,13 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#define STR_IMPLEMENTATION
 #include "str.h"
 
 
 int main(void)
 {
-    /* -------------------------------------------------- */
-    /* Basic strings */
     str empty = { .data = NULL, .length = 0 };
     str hello = cstr("hello");
     str world = cstr("world");
@@ -19,7 +18,6 @@ int main(void)
     str llo   = cstr("llo");
     str hello2 = cstr("hello");
 
-    /* -------------------------------------------------- */
     /* str_match */
     assert(str_match(hello, hello2));
     assert(!str_match(hello, world));
@@ -28,7 +26,6 @@ int main(void)
     assert(!str_match(hello, empty));
     assert(!str_match(empty, empty));
 
-    /* -------------------------------------------------- */
     /* str_find_first */
     assert(str_find_first(hello, hell) == 0);
     assert(str_find_first(hello, ello) == 1);
@@ -40,7 +37,6 @@ int main(void)
     assert(str_find_first(empty, hello) == -1);
     assert(str_find_first(empty, empty) == -1);
 
-    /* -------------------------------------------------- */
     /* str_find_last */
     str banana = cstr("banana");
     str na = cstr("na");
@@ -53,7 +49,6 @@ int main(void)
     assert(str_find_last(banana, empty) == -1);
     assert(str_find_last(empty, na) == -1);
 
-    /* -------------------------------------------------- */
     /* str_contains */
     assert(str_contains(hello, hell));
     assert(str_contains(hello, lo));
@@ -61,7 +56,6 @@ int main(void)
     assert(!str_contains(hello, empty));
     assert(!str_contains(empty, hello));
 
-    /* -------------------------------------------------- */
     /* str_sub */
     str sub1 = str_sub(hello, 0, 5);
     assert(sub1.length == 5);
@@ -80,7 +74,6 @@ int main(void)
     str sub5 = str_sub(empty, 0, 0);
     assert(sub5.data == NULL && sub5.length == 0);
 
-    /* -------------------------------------------------- */
     /* str_starts_with */
     assert(str_starts_with(hello, hell));
     assert(str_starts_with(hello, hello));
@@ -88,7 +81,6 @@ int main(void)
     assert(!str_starts_with(hello, world));
     assert(!str_starts_with(empty, hello));
 
-    /* -------------------------------------------------- */
     /* str_ends_with */
     assert(str_ends_with(hello, lo));
     assert(str_ends_with(hello, o));
@@ -96,7 +88,6 @@ int main(void)
     assert(!str_ends_with(hello, hell));
     assert(!str_ends_with(empty, o));
 
-    /* -------------------------------------------------- */
     /* str_remove_prefix */
     str rp1 = str_remove_prefix(hello, hell);
     assert(rp1.length == 1);
@@ -108,7 +99,6 @@ int main(void)
     str rp3 = str_remove_prefix(empty, hell);
     assert(rp3.data == empty.data && rp3.length == empty.length);
 
-    /* -------------------------------------------------- */
     /* str_remove_suffix */
     str rs1 = str_remove_suffix(hello, lo);
     assert(rs1.length == 3);
@@ -120,7 +110,7 @@ int main(void)
     str rs3 = str_remove_suffix(empty, lo);
     assert(rs3.data == empty.data && rs3.length == empty.length);
 
-    /* -------------------------------------------------- */
+
     printf("All str tests passed successfully.\n");
     return 0;
 }
